@@ -39,10 +39,10 @@ function initSocketServer(httpServer){
                 role:"user"
             })
 
-            // make short term history firstly create a chatHistory
-            const chatHistory = await messageModel.find({
+            // make short term history firstly create a chatHistory or we can say chatHistory Array
+            const chatHistory = (await messageModel.find({
                 chat:messagePayload.chat
-            })
+            }).sort({createdAt: -1}).limit(5).lean()).reverse()
 
             // make short term history
             const response = await aiServices.genrateResponse(chatHistory.map(item => {
